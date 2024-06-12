@@ -77,8 +77,13 @@ module BlueprinterActiveRecord
         # look for a matching association on the model
         ref = model ? model.reflections[assoc.name.to_s] : nil
         if (ref || model.nil?) && !assoc.blueprint.is_a?(Proc)
-          ref_model = ref && !(ref.belongs_to? && ref.polymorphic?) ? ref.klass : nil
-          acc[assoc.name] = preloads(assoc.blueprint, assoc.view, ref_model)
+          acc[assoc.name] =
+            if assoc.blueprint == blueprint and assoc.view == view_name
+              {} # halt on recursive blueprints
+            else
+              ref_model = ref && !(ref.belongs_to? && ref.polymorphic?) ? ref.klass : nil
+              preloads(assoc.blueprint, assoc.view, ref_model)
+            end
         end
 
         # look for a :preload option on the association

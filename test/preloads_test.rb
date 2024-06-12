@@ -71,4 +71,14 @@ class PreloadsTest < Minitest::Test
       battery1: {refurb_plan: {}},
     }, preloads)
   end
+
+  def test_preload_with_recursive_association
+    blueprint = Class.new(Blueprinter::Base) do
+      association :children, blueprint: self
+      association :widgets, blueprint: WidgetBlueprint
+    end
+
+    preloads = BlueprinterActiveRecord::Preloader.preloads(blueprint, :default, Category)
+    assert_equal({children: {}, widgets: {}}, preloads)
+  end
 end
