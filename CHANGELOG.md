@@ -1,3 +1,6 @@
+### 1.1.1 (2024-06-12)
+- [BUGFIX] Fixes an infinite loop when [a Blueprint has an association to itself](https://github.com/procore-oss/blueprinter-activerecord/issues/13)
+
 ### 1.1.0 (2024-06-10)
 - [FEATURE] Ability to annotate a field or association for extra preloads (e.g. `field :category_name, preload: :category`)
 
